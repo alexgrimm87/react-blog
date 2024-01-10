@@ -9,11 +9,20 @@ module.exports = {
       },
       colors: {
         blog: {
-          green: '#5CB85C'
+          green: '#5CB85C',
+          darkGreen: '#3d8b3d',
+          lightenGray: '#ddd',
+          gray: '#bbb',
+          darkestGray: '#373a3c',
+          darkenGray: '#999',
+          tag: '#aaa'
         }
       },
       spacing: {
-        navItem: '0.425rem'
+        0.2: '0.2rem',
+        0.3: '0.3rem',
+        navItem: '0.425rem',
+        tag: '0.6rem'
       },
       boxShadow: {
         banner:
@@ -23,8 +32,13 @@ module.exports = {
         logo: '0px 1px 3px rgb(0 0 0 / 30%)'
       },
       fontSize: {
+        date: '0.8rem',
         logo: '3.5rem'
-      }
+      },
+      borderRadius: {
+        buttonSm: '0.2rem',
+        tag: '10rem'
+      },
     }
   },
   plugins: [],

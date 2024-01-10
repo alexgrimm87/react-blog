@@ -5,5 +5,15 @@
 @layer base {
   body {
     font-family: 'Source Sans Pro', sans-serif;
+    color: #373a3c;
+  }
+
+  a {
+    @apply text-blog-green;
+
+    &:hover {
+      @apply text-blog-darkGreen;
+      @apply underline;
+    }
   }
 }
