@@ -1,15 +1,26 @@
-import {FC} from "react";
+import {FC, useState} from "react";
+import {useSearchParams} from "react-router-dom";
+import ReactPaginate from "react-paginate";
+import {useGetGlobalFeedQuery} from "../../api/repository";
+import {FEED_PAGE_SIZE} from "../../consts";
+import {serializeSearchParams} from "../../../../utils/router";
 import {Container} from "../../../../common/components/container/container.component";
 import {FeedToggle} from "../feed-toggle/feed-toggle.component";
 import {ArticleList} from "../article-list/article-list.component";
-import {useGetGlobalFeedQuery} from "../../api/repository";
 
 interface FeedProps {}
 
 export const Feed: FC<FeedProps> = () => {
-  const {data, error, isLoading} = useGetGlobalFeedQuery('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [page, setPage] = useState(searchParams.get('page') ? Number(searchParams.get('page')) : 0);
+  const handlePageChange = ({selected}: {selected: number}) => {
+    setPage(selected);
+    setSearchParams(serializeSearchParams({page: String(selected)}));
+  }
 
-  if(isLoading) {
+  const {data, error, isLoading, isFetching} = useGetGlobalFeedQuery({page});
+
+  if(isLoading || isFetching) {
     return (
       <Container>
         Feed loading...
@@ -29,7 +40,26 @@ export const Feed: FC<FeedProps> = () => {
     <Container>
       <FeedToggle />
       <div className="flex">
-        <ArticleList list={data?.articles || []} />
+        <div className="w-3/4">
+          <ArticleList list={data?.articles || []} />
+          <nav className="my-4">
+            <ReactPaginate
+              pageCount={(data?.articlesCount || 0) / FEED_PAGE_SIZE}
+              pageRangeDisplayed={(data?.articlesCount || 0) / FEED_PAGE_SIZE}
+              previousLabel={null}
+              nextLabel={null}
+              containerClassName="flex"
+              pageClassName="group flex"
+              pageLinkClassName="p-3 text-blog-green bg-white border border-blog-lightenGray -ml-px
+              group-[&:nth-child(2)]:rounded-l group-[&:nth-last-child(2)]:rounded-r hover:bg-blog-pageHoverBg"
+              activeClassName="active group"
+              activeLinkClassName="group-[.active]:bg-blog-green group-[.active]:text-white
+              group-[.active]:border-blog-green"
+              onPageChange={handlePageChange}
+              forcePage={page}
+            />
+          </nav>
+        </div>
         <div className="w-1/4">tags</div>
       </div>
     </Container>
