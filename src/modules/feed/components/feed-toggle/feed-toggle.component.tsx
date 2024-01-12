@@ -1,14 +1,31 @@
 import {FC} from "react";
-import {NavLink} from "react-router-dom";
+import {NavLink, useSearchParams} from "react-router-dom";
+import clsx from "clsx";
 
 interface FeedToggleProps {}
 
 export const FeedToggle: FC<FeedToggleProps> = () => {
+  const [searchParams] = useSearchParams();
+  const tag = searchParams.get('tag');
+
+  const globalFeedClasses = clsx(
+    'bg-white border-blog-green py-2 px-4 hover:text-black/60 hover:no-underline',
+    {
+      'text-black/30': tag,
+      'border-b-2': !tag
+    }
+  );
+
   return (
     <div className="h-8">
       <ul className="flex">
         <li>
-          <NavLink to="/" className="bg-white border-b-2 border-blog-green py-2 px-4">Global Feed</NavLink>
+          <NavLink to="/" className={globalFeedClasses}>Global Feed</NavLink>
+          {tag && (
+            <span className="bg-white border-b-2 border-blog-green py-2 px-4 text-blog-green">
+              # {tag}
+            </span>
+          )}
         </li>
       </ul>
     </div>

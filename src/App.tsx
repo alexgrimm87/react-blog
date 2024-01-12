@@ -7,7 +7,7 @@ interface AppProps {}
 
 export const App: FC<AppProps> = () => {
   return(
-    <div>
+    <div className="pb-16">
       <Header />
       <Banner />
       <Feed />
