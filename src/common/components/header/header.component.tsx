@@ -20,7 +20,7 @@ export const Header:FC<HeaderProps> = () => {
             <Link to="/" className="font-titillium text-2xl mr-8 text-blog-green">react blog</Link>
             <ul className="pl-0 mb-0 list-none flex">
               <li>
-                <NavLink to="/" className={navLinkClasses}>Home</NavLink>
+                <NavLink to="/" className={navLinkClasses} end>Home</NavLink>
               </li>
               <li className="ml-4">
                 <NavLink to="/sign-in" className={navLinkClasses}>Sign in</NavLink>

@@ -1,6 +1,7 @@
 import {FC} from "react";
 import {useLocation, useParams} from "react-router-dom";
 import {useGetProfileFeedQuery} from "../../feed/api/repository";
+import {useGetProfileQuery} from "../api/repository";
 import {usePageParam} from "../../feed/hooks/use-page-param.hook";
 import {ProfileBanner} from "../components/profile-banner/profile-banner.component";
 import {Container} from "../../../common/components/container/container.component";
@@ -14,6 +15,10 @@ export const ProfilePage:FC<ProfilePageProps> = () => {
   const {profile} = useParams();
   const { pathname } = useLocation();
 
+  const {data: profileInfo, isLoading: profileLoading} = useGetProfileQuery({
+    username: profile!
+  });
+
   const {data, isLoading, isFetching, error} = useGetProfileFeedQuery({
     page,
     author: profile!,
@@ -26,9 +31,13 @@ export const ProfilePage:FC<ProfilePageProps> = () => {
     {text: 'Favorited articles', link: `/@${encodeURIComponent(profile!)}/favorites`}
   ];
 
+  if (profileLoading) {
+    return null;
+  }
+
   return (
     <>
-      <ProfileBanner />
+      <ProfileBanner profile={profileInfo!.profile} />
       <Container>
         <FeedToggle
           defaultText="My Articles"
