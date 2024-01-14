@@ -26,7 +26,7 @@ export const Article:FC<ArticleProps> = ({
                    alt={`${author.username} avatar`}/>
             </Link>
             <div className="mr-6 ml-0.3 leading-4 inline-flex flex-col">
-              <Link to={`/@${author.username}`} className="font-medium">{author.username}</Link>
+              <Link to={`/@${encodeURIComponent(author.username)}`} className="font-medium">{author.username}</Link>
               <span className="text-blog-gray-500 text-date">{DateTime.fromISO(createdAt).toLocaleString(DateTime.DATE_FULL)}</span>
             </div>
           </div>
