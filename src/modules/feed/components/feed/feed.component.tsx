@@ -54,8 +54,8 @@ export const Feed: FC<FeedProps> = () => {
               nextLabel={null}
               containerClassName="flex"
               pageClassName="group flex"
-              pageLinkClassName="p-3 text-blog-green bg-white border border-blog-lightenGray -ml-px
-              group-[&:nth-child(2)]:rounded-l group-[&:nth-last-child(2)]:rounded-r hover:bg-blog-pageHoverBg"
+              pageLinkClassName="p-3 text-blog-green bg-white border border-blog-gray-300 -ml-px
+              group-[&:nth-child(2)]:rounded-l group-[&:nth-last-child(2)]:rounded-r hover:bg-blog-gray-200"
               activeClassName="active group"
               activeLinkClassName="group-[.active]:bg-blog-green group-[.active]:text-white
               group-[.active]:border-blog-green"
