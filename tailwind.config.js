@@ -45,12 +45,18 @@ module.exports = {
       },
       fontSize: {
         date: '0.8rem',
+        articleBody: '1.2rem',
+        articleTitle: '2.8rem',
         logo: '3.5rem'
       },
       borderRadius: {
         buttonSm: '0.2rem',
         tag: '10rem'
       },
+      lineHeight: {
+        articleTitle: '1.1',
+        articleBody: '1.8rem',
+      }
     }
   },
   plugins: [],
