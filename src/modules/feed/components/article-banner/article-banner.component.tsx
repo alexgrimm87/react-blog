@@ -8,8 +8,6 @@ interface ArticleBannerProps {
   author: Author;
   likes: number;
   publishedAt: string;
-  // slug: string;
-  // isFavorited: boolean;
 }
 
 export const ArticleBanner:FC<ArticleBannerProps> = ({

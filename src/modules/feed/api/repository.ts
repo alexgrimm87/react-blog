@@ -5,6 +5,7 @@ import {FEED_PAGE_SIZE} from "../consts";
 import {FeedArticle} from "./dto/global-feed.in";
 import {PopularTagsInDTO} from "./dto/popular-tags.in";
 import {SingleArticleInDTO} from "./dto/single-article.in";
+import {ArticleCommentsInDTO} from "./dto/article-comments.in";
 
 interface BaseFeedParams {
   page: number;
@@ -61,8 +62,13 @@ export const feedApi = createApi({
       })
     }),
     getSingleArticle: builder.query<SingleArticleInDTO, SingleArticleParams>({
-      query: ({ slug }) => ({
+      query: ({slug}) => ({
         url: `/articles/${slug}`
+      })
+    }),
+    getCommentsForArticle: builder.query<ArticleCommentsInDTO, SingleArticleParams>({
+      query: ({slug}) => ({
+        url: `/articles/${slug}/comments`
       })
     })
   })
@@ -72,5 +78,6 @@ export const {
   useGetGlobalFeedQuery,
   useGetProfileFeedQuery,
   useGetPopularTagsQuery,
-  useGetSingleArticleQuery
+  useGetSingleArticleQuery,
+  useGetCommentsForArticleQuery
 } = feedApi;

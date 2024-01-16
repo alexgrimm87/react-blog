@@ -5,6 +5,7 @@ import {ArticleBanner} from "../components/article-banner/article-banner.compone
 import {Container} from "../../../common/components/container/container.component";
 import {TagList} from "../components/tag-list/tag-list.component";
 import {ArticleMeta} from "../components/article-meta/article-meta.component";
+import {CommentsList} from "../components/comments-list/comments-list.component";
 
 interface ArticlePageProps {}
 
@@ -49,6 +50,7 @@ export const ArticlePage:FC<ArticlePageProps> = () => {
             likes={data.article.favoritesCount}
           />
         </div>
+        <CommentsList />
       </Container>
     </>
   );
