@@ -1,10 +1,12 @@
 import {BaseQueryFn} from '@reduxjs/toolkit/query';
 import axios from 'axios';
 import type {AxiosRequestConfig, AxiosError} from 'axios';
+import {RootState} from "../store/store";
+import {authSlice} from "../modules/auth/service/slice";
 
 export const axiosBaseQuery =
   (
-    { baseUrl }: { baseUrl: string } = { baseUrl: '' }
+    {baseUrl}: {baseUrl: string} = {baseUrl: ''}
   ): BaseQueryFn<
     {
       url: string;
@@ -15,22 +17,33 @@ export const axiosBaseQuery =
     unknown,
     unknown
   > =>
-  async ({ url, method = 'get', data, params }) => {
+  async ({url, method = 'get', data, params}, {getState}) => {
+    const state = getState() as RootState;
+    const token = state[authSlice.name].user?.token;
+
     try {
+      const headers: Record<string, string> = {};
+
+      if (token) {
+        headers['Authorization'] = `Token ${token}`;
+      }
+
       const result = await axios({
         url: baseUrl + url,
         method,
         data,
-        params
+        params,
+        headers
       });
-      return { data: result.data };
+
+      return {data: result.data};
     } catch (axiosError) {
       let err = axiosError as AxiosError;
       return {
         error: {
           status: err.response?.status,
           data: err.response?.data || err.message,
-        },
+        }
       };
     }
   };
