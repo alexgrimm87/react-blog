@@ -7,30 +7,34 @@ import {ProfilePage} from '../modules/profile/pages/profile.page';
 export const routes = {
   globalFeed: {
     path: '/',
-    Element: GlobalFeedPage,
+    Element: GlobalFeedPage
   },
   personalFeed: {
     path: '/personal-feed',
-    Element: GlobalFeedPage,
+    Element: GlobalFeedPage
   },
   profile: {
     path: '/@:profile',
-    Element: ProfilePage,
+    Element: ProfilePage
   },
   profileFavorites: {
     path: '/@:profile/favorites',
-    Element: ProfilePage,
+    Element: ProfilePage
   },
   singleArticle: {
     path: '/article/:slug',
-    Element: ArticlePage,
+    Element: ArticlePage
   },
   signIn: {
     path: '/sign-in',
-    Element: SignInPage,
+    Element: SignInPage
   },
   signUp: {
     path: '/sign-up',
-    Element: SignUpPage,
+    Element: SignUpPage
   },
+  settings: {
+    path: '/settings',
+    Element: GlobalFeedPage
+  }
 };

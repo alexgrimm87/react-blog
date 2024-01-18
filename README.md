@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Swagger [Conduit API](https://realworld-docs.netlify.app/docs/specs/frontend-specs/swagger/).
+
 ## Available Scripts
 
 In the project directory, you can run:
