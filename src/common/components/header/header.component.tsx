@@ -7,7 +7,7 @@ import {Container} from "../container/container.component";
 interface HeaderProps {}
 
 export const Header:FC<HeaderProps> = () => {
-  const {isLoggedIn, logOut} = useAuth();
+  const {isLoggedIn, logOut, user} = useAuth();
 
   const navLinkClasses = ({isActive}: {isActive: boolean}) =>
     clsx('py-navItem hover:text-black/60 hover:no-underline', {
@@ -26,14 +26,32 @@ export const Header:FC<HeaderProps> = () => {
                 <NavLink to="/" className={navLinkClasses} end>Home</NavLink>
               </li>
               {isLoggedIn ? (
-                <li className="ml-4">
-                  <NavLink
-                    to="/"
-                    onClick={logOut}
-                    className="py-navItem text-black/30 hover:text-black/60 hover:no-underline">
-                    Log out
-                  </NavLink>
-                </li>
+                <>
+                  <li className="ml-4">
+                    <i className="mr-1 ion-compose" />
+                    <NavLink to="/editor" className={navLinkClasses}>New article</NavLink>
+                  </li>
+                  <li className="ml-4">
+                    <i className="mr-1 ion-gear-a" />
+                    <NavLink to="/settings" className={navLinkClasses}>Settings</NavLink>
+                  </li>
+                  <li className="ml-4">
+                    <img
+                      className="w-6 h-6 rounded-full inline mr-2"
+                      src={user?.image}
+                      alt={`${user?.username} avatar`}
+                    />
+                    <NavLink to={`/@${user?.username}`} className={navLinkClasses}>{user?.username}</NavLink>
+                  </li>
+                  <li className="ml-4">
+                    <NavLink
+                      to="/"
+                      onClick={logOut}
+                      className="py-navItem text-black/30 hover:text-black/60 hover:no-underline">
+                      Log out
+                    </NavLink>
+                  </li>
+                </>
               ) : (
                 <>
                   <li className="ml-4">

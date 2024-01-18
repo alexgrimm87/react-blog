@@ -1,6 +1,7 @@
 import {FC} from "react";
 import {useSearchParams} from "react-router-dom";
 import {useGetGlobalFeedQuery} from "../api/repository";
+import {useAuth} from "../../auth/hooks/use-auth";
 import {usePageParam} from "../hooks/use-page-param.hook";
 import {Container} from "../../../common/components/container/container.component";
 import {Banner} from "../../../common/components/banner/banner.component";
@@ -19,9 +20,11 @@ export const GlobalFeedPage:FC<GlobalFeedPageProps> = () => {
     tag: searchParams.get('tag')
   });
 
+  const {isLoggedIn} = useAuth();
+
   return (
     <>
-      <Banner />
+      {!isLoggedIn && <Banner />}
       <Container>
         <FeedToggle />
         <div className="flex">
