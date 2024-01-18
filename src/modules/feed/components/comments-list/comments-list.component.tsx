@@ -35,6 +35,8 @@ export const CommentsList:FC<CommentsListProps> = () => {
           body={comment.body}
           author={comment.author}
           publishedAt={comment.createdAt}
+          slug={slug!}
+          isFavorited={false}
         />
       ))}
     </div>

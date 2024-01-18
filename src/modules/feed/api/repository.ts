@@ -1,17 +1,18 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
 import {realWorldBaseQuery} from "../../../core/api/realworld-base-query";
-import {transformResponse} from "./utils";
+import {replaceCachedArticle, transformResponse} from "./utils";
 import {FEED_PAGE_SIZE} from "../consts";
 import {FeedArticle} from "./dto/global-feed.in";
 import {PopularTagsInDTO} from "./dto/popular-tags.in";
 import {SingleArticleInDTO} from "./dto/single-article.in";
 import {ArticleCommentsInDTO} from "./dto/article-comments.in";
+import {FavoriteArticleInDTO} from "./dto/favorite-article.in";
 
 interface BaseFeedParams {
   page: number;
 }
 
-interface GlobalFeedParams extends BaseFeedParams {
+export interface GlobalFeedParams extends BaseFeedParams {
   tag: string | null;
   isPersonalFeed: boolean;
 }
@@ -30,9 +31,14 @@ interface SingleArticleParams {
   slug: string;
 }
 
+interface FavoriteArticleParams {
+  slug: string;
+}
+
 export const feedApi = createApi({
   reducerPath: 'feedApi',
   baseQuery: realWorldBaseQuery,
+  tagTypes: ['Article', 'Articles'],
   endpoints: (builder) => ({
     getGlobalFeed: builder.query<FeedData, GlobalFeedParams>({
       query: ({page, tag, isPersonalFeed}) => ({
@@ -43,7 +49,14 @@ export const feedApi = createApi({
           tag
         }
       }),
-      transformResponse
+      transformResponse,
+      providesTags: (result) =>
+        result
+          ? result?.articles.map((article) => ({
+            type: 'Article',
+            slug: article.slug,
+          }))
+          : ['Articles']
     }),
     getProfileFeed: builder.query<FeedData, ProfileFeedParams>({
       query: ({page, author, isFavorite = false}) => ({
@@ -71,6 +84,24 @@ export const feedApi = createApi({
       query: ({slug}) => ({
         url: `/articles/${slug}/comments`
       })
+    }),
+    favoriteArticle: builder.mutation<FavoriteArticleInDTO, FavoriteArticleParams>({
+      query: ({slug}) => ({
+        url: `/articles/${slug}/favorite`,
+        method: 'post'
+      }),
+      onQueryStarted: async ({}, {dispatch, queryFulfilled, getState}) => {
+        await replaceCachedArticle(getState, queryFulfilled, dispatch, feedApi);
+      }
+    }),
+    unfavoriteArticle: builder.mutation<FavoriteArticleInDTO, FavoriteArticleParams>({
+      query: ({slug}) => ({
+        url: `/articles/${slug}/favorite`,
+        method: 'delete'
+      }),
+      onQueryStarted: async ({}, {dispatch, queryFulfilled, getState}) => {
+        await replaceCachedArticle(getState, queryFulfilled, dispatch, feedApi);
+      }
     })
   })
 });
@@ -80,5 +111,7 @@ export const {
   useGetProfileFeedQuery,
   useGetPopularTagsQuery,
   useGetSingleArticleQuery,
-  useGetCommentsForArticleQuery
+  useGetCommentsForArticleQuery,
+  useFavoriteArticleMutation,
+  useUnfavoriteArticleMutation
 } = feedApi;
