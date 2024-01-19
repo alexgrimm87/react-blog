@@ -4,7 +4,8 @@ import clsx from 'clsx';
 export enum ButtonStyleEnum {
   DARK = 'DARK',
   LIGHT = 'LIGHT',
-  GREEN = 'GREEN'
+  GREEN = 'GREEN',
+  DANGER = 'DANGER'
 }
 
 enum ButtonSizeEnum {
@@ -48,6 +49,8 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = ({
       'bg-white text-blog-green hover:bg-blog-green hover:text-white disabled:bg-blog-darkGreen disabled:text-white':
         btnStyle === ButtonStyleEnum.GREEN &&
         variant === ButtonVariantEnum.OUTLINE,
+      'border-blog-red text-blog-red hover:bg-blog-red focus:bg-blog-red hover:text-white':
+        btnStyle === ButtonStyleEnum.DANGER,
       'py-1 px-2 text-sm rounded-buttonSm': size === ButtonSizeEnum.BASE,
       'py-3 px-6 text-xl rounded': size === ButtonSizeEnum.LG
     }

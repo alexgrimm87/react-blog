@@ -1,5 +1,6 @@
 import {FC} from "react";
 import {useParams} from "react-router-dom";
+import MDEditor from '@uiw/react-md-editor';
 import {useGetSingleArticleQuery} from "../api/repository";
 import {ArticleBanner} from "../components/article-banner/article-banner.component";
 import {Container} from "../../../common/components/container/container.component";
@@ -37,10 +38,9 @@ export const ArticlePage:FC<ArticlePageProps> = () => {
       />
       <Container>
         <div className="pb-8 border-b mb-6">
-          <p className="text-articleBody leading-articleBody font-sourceSerif mb-8"
-            dangerouslySetInnerHTML={{
-              __html: convertNewLines(data.article.body)
-            }}
+          <MDEditor.Markdown
+            source={convertNewLines(data.article.body)}
+            className="text-articleBody leading-articleBody font-sourceSerif mb-8"
           />
           <TagList list={data.article.tagList} />
         </div>

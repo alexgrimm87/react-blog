@@ -8,6 +8,7 @@ import {useAuth} from "../hooks/use-auth";
 import {Container} from "../../../common/components/container/container.component";
 import {Input} from "../../../common/components/input/input.component";
 import {Button} from "../../../common/components/button/button.component";
+import {ErrorsList} from '../../../common/components/errors-list/errors-list.component';
 
 interface SignUpPageProps {}
 
@@ -53,14 +54,7 @@ export const SignUpPage:FC<SignUpPageProps> = () => {
         <Link to="/sign-in">Have an account?</Link>
       </p>
       <form className="max-w-xl mx-auto flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)} noValidate>
-        <ul className="list-disc pl-10">
-          {(Object.keys(formState.errors) as (keyof typeof formState.errors)[]
-          ).map((field) => (
-            <li key={`error-${field}`} className="text-blog-red font-bold">
-              {formState.errors[field]!.message}
-            </li>
-          ))}
-        </ul>
+        <ErrorsList errors={formState.errors} />
         <Input placeholder="Username" {...register('username')} />
         <Input type="email" placeholder="Email" {...register('email')} />
         <Input type="password" placeholder="Password" {...register('password')} />

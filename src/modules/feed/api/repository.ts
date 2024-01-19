@@ -7,6 +7,8 @@ import {PopularTagsInDTO} from "./dto/popular-tags.in";
 import {SingleArticleInDTO} from "./dto/single-article.in";
 import {ArticleCommentsInDTO} from "./dto/article-comments.in";
 import {FavoriteArticleInDTO} from "./dto/favorite-article.in";
+import {CreateArticleInDTO} from "./dto/create-article.in";
+import {CreateArticleOutDTO} from "./dto/create-article.out";
 
 interface BaseFeedParams {
   page: number;
@@ -35,10 +37,18 @@ interface FavoriteArticleParams {
   slug: string;
 }
 
+interface CreateArticleParams {
+  title: string;
+  description: string;
+  body: string;
+  tags: string;
+}
+
 export const feedApi = createApi({
   reducerPath: 'feedApi',
   baseQuery: realWorldBaseQuery,
   endpoints: (builder) => ({
+    // queries
     getGlobalFeed: builder.query<FeedData, GlobalFeedParams>({
       keepUnusedDataFor: 1,
       query: ({page, tag, isPersonalFeed}) => ({
@@ -80,6 +90,7 @@ export const feedApi = createApi({
         url: `/articles/${slug}/comments`
       })
     }),
+    // mutations
     favoriteArticle: builder.mutation<FavoriteArticleInDTO, FavoriteArticleParams>({
       query: ({slug}) => ({
         url: `/articles/${slug}/favorite`,
@@ -97,6 +108,24 @@ export const feedApi = createApi({
       onQueryStarted: async ({}, {dispatch, queryFulfilled, getState}) => {
         await replaceCachedArticle(getState, queryFulfilled, dispatch, feedApi);
       }
+    }),
+    createArticle: builder.mutation<CreateArticleInDTO, CreateArticleParams>({
+      query: ({ title, description, body, tags }) => {
+        const data: CreateArticleOutDTO = {
+          article: {
+            title,
+            description,
+            body,
+            tagList: tags.split(',').map((tag) => tag.trim())
+          }
+        };
+
+        return {
+          url: '/articles',
+          method: 'post',
+          data,
+        };
+      }
     })
   })
 });
@@ -108,5 +137,6 @@ export const {
   useGetSingleArticleQuery,
   useGetCommentsForArticleQuery,
   useFavoriteArticleMutation,
-  useUnfavoriteArticleMutation
+  useUnfavoriteArticleMutation,
+  useCreateArticleMutation
 } = feedApi;
