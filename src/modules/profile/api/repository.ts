@@ -1,11 +1,23 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
 import {realWorldBaseQuery} from "../../../core/api/realworld-base-query";
+import {setUser} from "../../auth/service/slice";
+import {replaceCachedProfile} from './utils';
+import {RootState} from "../../../store/store";
 import {GetProfileInDTO} from "./dto/get-profile.in";
 import {FollowUserInDTO} from "./dto/follow-user.in";
-import {replaceCachedProfile} from './utils';
+import {UpdateUserInDTO} from "./dto/update-user.in";
+import {UpdateUserOutDTO} from "./dto/update-user.out";
 
 export interface ProfileParams {
   username: string;
+}
+
+interface UpdateProfileParams {
+  avatar: string;
+  username: string;
+  bio: string;
+  email: string;
+  newPassword: string;
 }
 
 export const profileApi = createApi({
@@ -18,11 +30,11 @@ export const profileApi = createApi({
       })
     }),
     followUser: builder.mutation<FollowUserInDTO, ProfileParams>({
-      query: ({ username }) => ({
+      query: ({username}) => ({
         url: `/profiles/${username}/follow`,
         method: 'post'
       }),
-      onQueryStarted: async ({}, { dispatch, queryFulfilled, getState }) => {
+      onQueryStarted: async ({}, {dispatch, queryFulfilled, getState}) => {
         await replaceCachedProfile(
           getState,
           queryFulfilled,
@@ -32,16 +44,55 @@ export const profileApi = createApi({
       },
     }),
     unfollowUser: builder.mutation<FollowUserInDTO, ProfileParams>({
-      query: ({ username }) => ({
+      query: ({username}) => ({
         url: `/profiles/${username}/follow`,
         method: 'delete'
       }),
-      onQueryStarted: async ({}, { dispatch, queryFulfilled, getState }) => {
+      onQueryStarted: async ({}, {dispatch, queryFulfilled, getState}) => {
         await replaceCachedProfile(
           getState,
           queryFulfilled,
           dispatch,
           profileApi
+        );
+      }
+    }),
+    updateUser: builder.mutation<UpdateUserInDTO, UpdateProfileParams>({
+      query: ({email, username, bio, avatar, newPassword}) => {
+        const data: UpdateUserOutDTO = {
+          user: {
+            email,
+            username,
+            bio,
+            image: avatar
+          }
+        };
+
+        if (newPassword) {
+          data.user.password = newPassword;
+        }
+
+        return {
+          url: '/user',
+          method: 'put',
+          data
+        };
+      },
+      onQueryStarted: async (
+        {email, username, bio, avatar},
+        {dispatch, queryFulfilled, getState}
+      ) => {
+        const state = getState() as RootState;
+        await queryFulfilled;
+
+        await dispatch(
+          setUser({
+            token: state.auth.user!.token,
+            email,
+            username,
+            bio,
+            image: avatar
+          })
         );
       }
     })
@@ -51,5 +102,6 @@ export const profileApi = createApi({
 export const {
   useGetProfileQuery,
   useFollowUserMutation,
-  useUnfollowUserMutation
+  useUnfollowUserMutation,
+  useUpdateUserMutation
 } = profileApi;

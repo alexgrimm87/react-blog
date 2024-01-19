@@ -26,11 +26,11 @@ export const CommentMeta: FC<CommentMetaProps> = ({
   slug
 }) => {
   const auth = useAuth();
-  const [triggerDeleteComment, { isLoading }] = useDeleteCommentMutation();
+  const [triggerDeleteComment, {isLoading}] = useDeleteCommentMutation();
 
   const deleteComment = async () => {
     try {
-      await triggerDeleteComment({articleSlug: slug, id: commentId});
+      await triggerDeleteComment({articleSlug: slug, id: commentId}).unwrap();
     } catch (e) {
       toast.error("Something went wrong. Please, try again later");
     }

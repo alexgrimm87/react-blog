@@ -16,7 +16,7 @@ export const MDEditorHookForm: FC<MDEditorHookFormProps> = ({
     <Controller
       name={name}
       control={control}
-      render={({field: { value, onChange }}) => (
+      render={({field: {value, onChange}}) => (
         <MDEditor value={value} onChange={onChange} {...props} />
       )}
     />

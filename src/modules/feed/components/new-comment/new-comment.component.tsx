@@ -28,7 +28,7 @@ export const NewComment: FC<NewCommentProps> = ({slug}) => {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting }
+    formState: {isSubmitting}
   } = useForm({
     defaultValues: {
       comment: ''
@@ -50,7 +50,7 @@ export const NewComment: FC<NewCommentProps> = ({slug}) => {
       await triggerCreateComment({
         articleSlug: slug,
         comment: values.comment
-      });
+      }).unwrap();
     } catch (e) {
       toast.error("Something went wrong. Please, try again later");
     }

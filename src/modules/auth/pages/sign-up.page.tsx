@@ -25,7 +25,7 @@ const validationSchema = yup.object({
 });
 
 export const SignUpPage:FC<SignUpPageProps> = () => {
-  const { signUp } = useAuth();
+  const {signUp} = useAuth();
 
   const {register, handleSubmit, formState} = useForm<SignUpFormValues>({
     defaultValues: {

@@ -23,7 +23,7 @@ const validationSchema = yup.object({
 });
 
 export const SignInPage:FC<SignInPageProps> = () => {
-  const { signIn } = useAuth();
+  const {signIn} = useAuth();
 
   const {register, handleSubmit, formState} = useForm<SignInFormValues>({
     defaultValues: {

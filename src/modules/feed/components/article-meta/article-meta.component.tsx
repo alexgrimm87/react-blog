@@ -42,7 +42,7 @@ export const ArticleMeta:FC<ArticleMetaProps> = ({
 
   const deleteArticle = async () => {
     try {
-      await triggerDeleteArticle({slug});
+      await triggerDeleteArticle({slug}).unwrap();
       navigate('/');
     } catch (e) {
       toast.error("Something went wrong. Please, try again later");

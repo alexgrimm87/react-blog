@@ -11,7 +11,7 @@ interface ProfileBannerProps {
   profile: Profile;
 }
 
-export const ProfileBanner:FC<ProfileBannerProps> = ({ profile }) => {
+export const ProfileBanner:FC<ProfileBannerProps> = ({profile}) => {
   const {user} = useAuth();
   const navigate = useNavigate();
 

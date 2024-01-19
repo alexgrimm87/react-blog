@@ -13,7 +13,7 @@ interface ProfilePageProps {}
 export const ProfilePage:FC<ProfilePageProps> = () => {
   const {page} = usePageParam();
   const {profile} = useParams();
-  const { pathname } = useLocation();
+  const {pathname} = useLocation();
 
   const {data: profileInfo, isLoading: profileLoading} = useGetProfileQuery({
     username: profile!
