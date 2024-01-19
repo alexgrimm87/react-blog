@@ -31,7 +31,7 @@ export const ProfileBanner:FC<ProfileBannerProps> = ({ profile }) => {
         </div>
         <div className="flex justify-end">
           {user?.username !== profile.username ? (
-            <FollowButton username={profile.username} />
+            <FollowButton username={profile.username} isFollowed={profile.following} />
           ) : (
             <Button onClick={goToSettings}>
               <i className="mr-1 ion-gear-a" />
