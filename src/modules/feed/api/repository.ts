@@ -46,6 +46,10 @@ interface CreateArticleParams {
   tags: string;
 }
 
+interface DeleteArticleParams {
+  slug: string;
+}
+
 interface EditArticleParams extends CreateArticleParams {
   slug: string;
 }
@@ -153,6 +157,14 @@ export const feedApi = createApi({
       onQueryStarted: async ({}, {dispatch, queryFulfilled, getState}) => {
         await replaceCachedArticle(getState, queryFulfilled, dispatch, feedApi);
       }
+    }),
+    deleteArticle: builder.mutation<any, DeleteArticleParams>({
+      query: ({slug}) => {
+        return {
+          url: `/articles/${slug}`,
+          method: 'delete',
+        };
+      }
     })
   })
 });
@@ -166,5 +178,6 @@ export const {
   useFavoriteArticleMutation,
   useUnfavoriteArticleMutation,
   useCreateArticleMutation,
-  useEditArticleMutation
+  useEditArticleMutation,
+  useDeleteArticleMutation
 } = feedApi;

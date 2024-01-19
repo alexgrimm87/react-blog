@@ -49,7 +49,7 @@ export const Button: FC<PropsWithChildren<ButtonProps>> = ({
       'bg-white text-blog-green hover:bg-blog-green hover:text-white disabled:bg-blog-darkGreen disabled:text-white':
         btnStyle === ButtonStyleEnum.GREEN &&
         variant === ButtonVariantEnum.OUTLINE,
-      'border-blog-red text-blog-red hover:bg-blog-red focus:bg-blog-red hover:text-white':
+      'border-blog-red text-blog-red hover:bg-blog-red focus:bg-blog-red hover:text-white disabled:bg-blog-red disabled:text-white disabled:cursor-not-allowed':
         btnStyle === ButtonStyleEnum.DANGER,
       'py-1 px-2 text-sm rounded-buttonSm': size === ButtonSizeEnum.BASE,
       'py-3 px-6 text-xl rounded': size === ButtonSizeEnum.LG
