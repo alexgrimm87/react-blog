@@ -1,3 +1,4 @@
+import {FC} from "react";
 import {SignInPage} from '../modules/auth/pages/sign-in.page';
 import {SignUpPage} from '../modules/auth/pages/sign-up.page';
 import {ArticlePage} from '../modules/feed/pages/article.page';
@@ -6,14 +7,21 @@ import {ProfilePage} from '../modules/profile/pages/profile.page';
 import {EditorPage} from '../modules/feed/pages/editor.page';
 import {SettingsPage} from "../modules/profile/pages/settings.page";
 
-export const routes = {
+interface RouteItem {
+  path: string;
+  Element: FC;
+  private?: boolean;
+}
+
+export const routes: Record<string, RouteItem> = {
   globalFeed: {
     path: '/',
     Element: GlobalFeedPage
   },
   personalFeed: {
     path: '/personal-feed',
-    Element: GlobalFeedPage
+    Element: GlobalFeedPage,
+    private: true
   },
   profile: {
     path: '/@:profile',
@@ -37,7 +45,8 @@ export const routes = {
   },
   settings: {
     path: '/settings',
-    Element: SettingsPage
+    Element: SettingsPage,
+    private: true
   },
   createArticle: {
     path: '/editor',
