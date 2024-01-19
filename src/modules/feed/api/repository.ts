@@ -1,7 +1,7 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
-import {realWorldBaseQuery} from "../../../core/api/realworld-base-query";
-import {addNewCommentToCache, replaceCachedArticle, transformResponse} from "./utils";
 import {FEED_PAGE_SIZE} from "../consts";
+import {realWorldBaseQuery} from "../../../core/api/realworld-base-query";
+import {addNewCommentToCache, removeCommentFromCache, replaceCachedArticle, transformResponse} from "./utils";
 import {FeedArticle} from "./dto/global-feed.in";
 import {PopularTagsInDTO} from "./dto/popular-tags.in";
 import {SingleArticleInDTO} from "./dto/single-article.in";
@@ -59,6 +59,11 @@ interface EditArticleParams extends CreateArticleParams {
 interface CreateCommentParams {
   articleSlug: string;
   comment: string;
+}
+
+interface DeleteCommentParams {
+  id: number;
+  articleSlug: string;
 }
 
 export const feedApi = createApi({
@@ -166,6 +171,14 @@ export const feedApi = createApi({
         await replaceCachedArticle(getState, queryFulfilled, dispatch, feedApi);
       }
     }),
+    deleteArticle: builder.mutation<any, DeleteArticleParams>({
+      query: ({slug}) => {
+        return {
+          url: `/articles/${slug}`,
+          method: 'delete',
+        };
+      }
+    }),
     createComment: builder.mutation<NewCommentInDTO, CreateCommentParams>({
       query: ({articleSlug, comment}) => {
         const data: NewCommentOutDTO = {
@@ -184,12 +197,20 @@ export const feedApi = createApi({
         await addNewCommentToCache(getState, queryFulfilled, dispatch);
       },
     }),
-    deleteArticle: builder.mutation<any, DeleteArticleParams>({
-      query: ({slug}) => {
+    deleteComment: builder.mutation<any, DeleteCommentParams>({
+      query: ({id, articleSlug}) => {
         return {
-          url: `/articles/${slug}`,
-          method: 'delete',
+          url: `/articles/${articleSlug}/comments/${id}`,
+          method: 'delete'
         };
+      },
+      onQueryStarted: async (
+        {id},
+        {dispatch, queryFulfilled, getState}
+      ) => {
+        await removeCommentFromCache(getState, queryFulfilled, dispatch, {
+          id
+        });
       }
     })
   })
@@ -206,5 +227,6 @@ export const {
   useCreateArticleMutation,
   useEditArticleMutation,
   useDeleteArticleMutation,
-  useCreateCommentMutation
+  useCreateCommentMutation,
+  useDeleteCommentMutation
 } = feedApi;
