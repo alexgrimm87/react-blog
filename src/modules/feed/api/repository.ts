@@ -1,6 +1,6 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
 import {realWorldBaseQuery} from "../../../core/api/realworld-base-query";
-import {replaceCachedArticle, transformResponse} from "./utils";
+import {addNewCommentToCache, replaceCachedArticle, transformResponse} from "./utils";
 import {FEED_PAGE_SIZE} from "../consts";
 import {FeedArticle} from "./dto/global-feed.in";
 import {PopularTagsInDTO} from "./dto/popular-tags.in";
@@ -11,6 +11,8 @@ import {CreateArticleInDTO} from "./dto/create-article.in";
 import {CreateArticleOutDTO} from "./dto/create-article.out";
 import {EditArticleInDTO} from "./dto/edit-article.in";
 import {EditArticleOutDTO} from "./dto/edit-article.out";
+import {NewCommentInDTO} from "./dto/new-comment.in";
+import {NewCommentOutDTO} from "./dto/new-comment.out";
 
 interface BaseFeedParams {
   page: number;
@@ -52,6 +54,11 @@ interface DeleteArticleParams {
 
 interface EditArticleParams extends CreateArticleParams {
   slug: string;
+}
+
+interface CreateCommentParams {
+  articleSlug: string;
+  comment: string;
 }
 
 export const feedApi = createApi({
@@ -96,6 +103,7 @@ export const feedApi = createApi({
       })
     }),
     getCommentsForArticle: builder.query<ArticleCommentsInDTO, SingleArticleParams>({
+      keepUnusedDataFor: 1,
       query: ({slug}) => ({
         url: `/articles/${slug}/comments`
       })
@@ -158,6 +166,24 @@ export const feedApi = createApi({
         await replaceCachedArticle(getState, queryFulfilled, dispatch, feedApi);
       }
     }),
+    createComment: builder.mutation<NewCommentInDTO, CreateCommentParams>({
+      query: ({articleSlug, comment}) => {
+        const data: NewCommentOutDTO = {
+          comment: {
+            body: comment
+          }
+        };
+
+        return {
+          url: `/articles/${articleSlug}/comments`,
+          method: 'post',
+          data
+        };
+      },
+      onQueryStarted: async ({}, {dispatch, queryFulfilled, getState}) => {
+        await addNewCommentToCache(getState, queryFulfilled, dispatch);
+      },
+    }),
     deleteArticle: builder.mutation<any, DeleteArticleParams>({
       query: ({slug}) => {
         return {
@@ -179,5 +205,6 @@ export const {
   useUnfavoriteArticleMutation,
   useCreateArticleMutation,
   useEditArticleMutation,
-  useDeleteArticleMutation
+  useDeleteArticleMutation,
+  useCreateCommentMutation
 } = feedApi;
