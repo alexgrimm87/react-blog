@@ -38,8 +38,14 @@ export const routes = {
     path: '/settings',
     Element: GlobalFeedPage
   },
-  editor: {
+  createArticle: {
     path: '/editor',
     Element: EditorPage,
+    private: true
   },
+  editArticle: {
+    path: '/editor/:slug',
+    Element: EditorPage,
+    private: true
+  }
 };

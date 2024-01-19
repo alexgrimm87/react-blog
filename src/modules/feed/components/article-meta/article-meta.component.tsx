@@ -1,6 +1,7 @@
 import {ComponentProps, FC} from "react";
-import {Author} from "../../api/dto/global-feed.in";
+import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../auth/hooks/use-auth";
+import {Author} from "../../api/dto/global-feed.in";
 import {ArticleAuthor, NameStyleEnum} from "../article-author/article-author.component";
 import {Button} from '../../../../common/components/button/button.component';
 import {FollowButton} from "../../../profile/components/follow-button/follow-button.component";
@@ -30,6 +31,10 @@ export const ArticleMeta:FC<ArticleMetaProps> = ({
   isFavorited
 }) => {
   const auth = useAuth();
+  const navigate = useNavigate();
+  const navigateToEdit = () => {
+    navigate(`/editor/${slug}`);
+  };
 
   return (
     <div>
@@ -46,7 +51,7 @@ export const ArticleMeta:FC<ArticleMetaProps> = ({
         <div className="inline-flex gap-4">
           {auth.user?.username === author.username ? (
             <>
-              <Button>
+              <Button onClick={navigateToEdit}>
                 <i className="ion-edit" /> Edit Article
               </Button>
               <Button btnStyle="DANGER">
